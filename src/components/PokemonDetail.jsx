@@ -11,7 +11,7 @@ const Details = () => {
       pokemon: pokemon.key,
     },
   });
-  console.log(data?.getPokemon);
+
   return (
     <div>
       <h1 className="text-center">Pokemon Details</h1>
@@ -24,8 +24,8 @@ const Details = () => {
       ) : (
         <div className="d-flex justify-content-center m-3">
           {data?.getPokemon && (
-            <div className="card" style={{ width: "35rem" }}>
-              <img src={data.getPokemon.sprite} className="card-img-top" style={{ height: '600px' }}/>
+            <div className="card detail-container">
+              <img src={data.getPokemon.sprite} className="card-img-top"/>
               <div className="card-body">
                 <h5 className="card-title">{data.getPokemon.species}</h5>
               </div>

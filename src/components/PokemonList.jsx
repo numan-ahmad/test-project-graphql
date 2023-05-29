@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_POKEMONS } from "../graphQL/getAllPoemon";
-import { Link } from "react-router-dom";
+import { GET_ALL_POKEMONS } from "../graphQL/getAllPokemon";
 import { useNavigate } from "react-router-dom";
+import "../styles/pokemonStyles.css";
 
 function PokemonList() {
   const [page, setPage] = useState(1);
@@ -28,7 +28,7 @@ function PokemonList() {
 
       setFilteredData(filteredResults);
     }
-  }, [data, searchVal]);
+  }, [data]);
 
   const nextPage = () => {
     setPage(page + 1);
@@ -52,7 +52,6 @@ function PokemonList() {
 
   const searchResult = () => {
     if (searchVal) {
-      console.log('dsadasd', searchVal)
       const filteredResults = data.getAllPokemon.filter((pokemon) =>
         pokemon.species.toLowerCase().includes(searchVal.toLowerCase())
       );
@@ -63,20 +62,38 @@ function PokemonList() {
     }
   };
 
+  const onClearSearch = () => {
+    if (searchVal) {
+      setSearchVal("");
+      setFilteredData(data.getAllPokemon);
+    }
+  };
+
   return (
     <div>
       <h2 className="text-center">Pokemon List</h2>
-      <div className="d-flex ms-5" style={{ width: "35rem" }}>
-        <input
-          className="form-control me-2"
-          type="search"
-          placeholder="Search"
-          onChange={(e) => {
-            setSearchVal(e.target.value);
-          }}
-          value={searchVal}
-        />
-        <button className="btn btn-outline-success" onClick={searchResult}>
+      <div className="d-flex ms-5">
+        <div class="search-input">
+          <input
+            type="text"
+            disabled = {loading}
+            placeholder="Search by Title"
+            className="form-control me-2"
+            onChange={(e) => {
+              setSearchVal(e.target.value);
+            }}
+            value={searchVal}
+          />
+          {searchVal && (
+            <span
+              onClick={onClearSearch}
+              className="clear-icon"
+            >
+              &times;
+            </span>
+          )}
+        </div>
+        <button className="btn btn-outline-secondary" onClick={searchResult} disabled = {loading}>
           Search
         </button>
       </div>
@@ -97,6 +114,7 @@ function PokemonList() {
               <th>Color</th>
               <th>Key</th>
               <th>Image Url</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -104,8 +122,6 @@ function PokemonList() {
               <tr
                 className="cursor-pointer"
                 key={index}
-                onClick={() => rowClick(pokemon)}
-                style={{ cursor: "pointer" }}
               >
                 <td>{pokemon.num}</td>
                 <td>{pokemon.species}</td>
@@ -114,17 +130,22 @@ function PokemonList() {
                 <td>{pokemon.color}</td>
                 <td>{pokemon.key}</td>
                 <td>
-                  <a href={pokemon.sprite} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={pokemon.sprite}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {pokemon.sprite}
                   </a>
                 </td>
+                <td><button class="btn btn-link" onClick={() => rowClick(pokemon)}>See Detail</button></td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
 
-      {(!loading && filteredData.length) && (
+      {!loading && data.getAllPokemon.length && (
         <div className="d-grid gap-2 d-md-flex justify-content-md-end me-3">
           <button
             className="btn btn-primary"
@@ -149,4 +170,3 @@ function PokemonList() {
 }
 
 export default PokemonList;
-

@@ -1,0 +1,15 @@
+.search-input {
+  position: relative;
+}
+
+.search-input span {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.detail-container {
+    width: 35rem;
+}
